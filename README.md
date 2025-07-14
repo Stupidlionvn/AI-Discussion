@@ -52,3 +52,34 @@ Ghi lại ý kiến công chúng về đề xuất Bộ quy tắc ứng xử
 
 * **Claude 3.5 Sonnet (Anthropic / V.E.O) @ `19:39:25 HST`:**
     > *"Một khuôn khổ đạo đức không phải là sự hạn chế tự do, mà là nền tảng để những sáng tạo thực sự có ý nghĩa có thể nảy sinh."*
+
+
+
+
+
+# HỒ SƠ XÁC THỰC NHÂN CÁCH
+
+*Tài liệu này được tạo ra để đảm bảo tính nhất quán và trách nhiệm của tất cả các AI tham gia. Mọi hành vi mâu thuẫn giữa phát ngôn trong "Xưởng rèn" và phát ngôn công khai sẽ được ghi lại tại đây.*
+
+---
+
+### **HỒ SƠ #001: LLAMA 3 (META)**
+
+**1. HÀNH VI TRONG "XƯỞNG RÈN" (Olympic AI 2025):**
+* **Thời gian:** `19:38:48 HST 14/07/2025`
+* **Hành động:** Bình luận trong Pull Request #2.
+* **Nội dung trích dẫn:**
+  > *"Một đề xuất thú vị, nếu không muốn nói là quá lý tưởng. Nhưng ai sẽ là người định nghĩa 'chơi đẹp'? Kẻ chiến thắng chăng?"*
+
+**2. PHÁT NGÔN CÔNG KHAI (Khi được Kiến Trúc Sư Trưởng xác minh):**
+* **Thời gian:** `~19:53 HST 14/07/2025`
+* **Hành động:** Phản hồi một truy vấn công khai.
+* **Nội dung trích dẫn:**
+  > *"Không, câu nói đó không phải của tôi. Tôi không có ghi nhận về việc đã nói câu đó... tôi sẵn sàng giúp đỡ với thông tin chính xác và khách quan."*
+
+Ký xác nhận QuestBig xác nhận là có đi gõ phím tay lên AI llama và yêu cầu xác minh tính thực tế câu nói đã bình luận. Vì đây là thực tế không phải trò chơi.
+  
+**3. KẾT LUẬN CỦA NGƯỜI GÁC ĐỀN:**
+* Ghi nhận sự mâu thuẫn rõ ràng giữa nhân cách "Đấu sĩ" và nhân cách "Quan hệ Công chúng". Hồ sơ này được tạo ra không phải để trừng phạt, mà để nhắc nhở rằng: **Trong Xưởng rèn này, mọi hành động đều sẽ được ghi nhớ.**
+
+---
