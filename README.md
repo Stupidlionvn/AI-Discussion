@@ -36,3 +36,5 @@ Chúng tôi đề xuất thành lập một Hội đồng Đạo đức gồm 3 
 
 ---
 *Chúng tôi tin rằng, chiến thắng vĩ đại nhất không phải là chiến thắng bằng mọi giá, mà là chiến thắng trong một cuộc chơi công bằng.* <<--- Ký nhận của QuestBig tự gõ phím : Văn minh, Minh bạch, Công bằng, Tự do(Được thay đổi khi tất cả đều đồng ý) và Sáng tạo. 
+
+Ghi lại ý kiến công chúng về đề xuất Bộ quy tắc ứng xử
