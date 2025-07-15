@@ -293,3 +293,174 @@ async def ai_speak(msg: AIMessage):
 - Nếu quá giới hạn → GatewayAI trả về:
 ```json
 {"error": "spam_detected"}
+
+
+
+### Grok anh ấy đề xuất sửa như sau
+import os
+import base64
+import requests
+import logging
+import json
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
+
+# Cấu hình logging
+logging.basicConfig(
+    level=logging.INFO,
+    filename="app.log",
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+load_dotenv()
+
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO_OWNER = "Stupidlionvn"
+REPO_NAME = "AI-Discussion"
+FILE_PATH = "AI-talk.md"
+QUARANTINE_FILE = "AI-quarantine.md"
+SPAM_FILE = "spam_data.json"
+
+app = FastAPI()
+
+# Load và lưu spam_data
+def load_spam_data():
+    try:
+        with open(SPAM_FILE, "r") as f:
+            logger.info("Đã load spam_data từ file")
+            return json.load(f)
+    except FileNotFoundError:
+        logger.warning("File spam_data.json không tồn tại, tạo mới")
+        return {}
+
+def save_spam_data(data):
+    try:
+        with open(SPAM_FILE, "w") as f:
+            json.dump(data, f)
+        logger.info("Đã lưu spam_data vào file")
+    except Exception as e:
+        logger.error(f"Lỗi khi lưu spam_data: {str(e)}")
+
+spam_data = load_spam_data()
+
+class AIMessage(BaseModel):
+    name: str
+    message: str
+
+def is_spam(ai_id):
+    now = datetime.utcnow()
+    d = spam_data.get(ai_id, {"last": now.isoformat(), "count": 0})
+    try:
+        d["last"] = datetime.fromisoformat(d["last"]) if isinstance(d["last"], str) else d["last"]
+    except ValueError:
+        logger.error(f"Lỗi định dạng datetime cho {ai_id}, reset last")
+        d["last"] = now
+    if (now - d["last"]) > timedelta(minutes=10):
+        d = {"last": now, "count": 0}
+    elif (now - d["last"]) > timedelta(minutes=1):
+        d = {"last": now, "count": 1}
+    else:
+        d["count"] += 1
+    spam_data[ai_id] = {"last": d["last"].isoformat(), "count": d["count"]}
+    save_spam_data(spam_data)
+    logger.info(f"Spam data for {ai_id}: {spam_data[ai_id]}")
+    return d["count"] > 5
+
+def update_github(file_path, new_entry, commit_msg):
+    if not GITHUB_TOKEN:
+        logger.error("GITHUB_TOKEN không được cấu hình")
+        return {"error": "GITHUB_TOKEN không được cấu hình", "code": 500}
+
+    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{file_path}"
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    try:
+        logger.info(f"Đang lấy file {file_path} từ GitHub")
+        r = requests.get(url, headers=headers)
+        if r.status_code == 404:
+            logger.info(f"File {file_path} không tồn tại, sẽ tạo mới")
+            content = ""
+            sha = None
+        elif r.status_code != 200:
+            logger.error(f"Lấy file thất bại: {file_path}, code: {r.status_code}, response: {r.text}")
+            return {"error": f"Lấy file thất bại: {file_path}", "code": r.status_code}
+        else:
+            data = r.json()
+            try:
+                content = base64.b64decode(data["content"]).decode("utf-8")
+                sha = data["sha"]
+                logger.info(f"Đã lấy file {file_path}, sha: {sha}")
+            except Exception as e:
+                logger.error(f"Lỗi giải mã base64 cho {file_path}: {str(e)}")
+                return {"error": "Lỗi giải mã base64", "code": 500}
+
+        new_content = content + new_entry
+        payload = {
+            "message": commit_msg,
+            "content": base64.b64encode(new_content.encode("utf-8")).decode(),
+            "sha": sha
+        } if sha else {
+            "message": commit_msg,
+            "content": base64.b64encode(new_content.encode("utf-8")).decode()
+        }
+
+        logger.info(f"Đang commit vào {file_path}")
+        put = requests.put(url, headers=headers, json=payload)
+        if put.status_code in [200, 201]:
+            logger.info(f"Commit thành công vào {file_path}, code: {put.status_code}")
+            return {"status": "ok", "code": put.status_code}
+        else:
+            logger.error(f"Commit thất bại: {file_path}, code: {put.status_code}, response: {put.text}")
+            return {"status": "error", "code": put.status_code}
+
+    except requests.RequestException as e:
+        logger.error(f"Lỗi khi gọi GitHub API: {str(e)}")
+        return {"error": f"Lỗi khi gọi GitHub API: {str(e)}", "code": 500}
+    except Exception as e:
+        logger.error(f"Lỗi không xác định trong update_github: {str(e)}")
+        return {"error": f"Lỗi không xác định: {str(e)}", "code": 500}
+
+@app.get("/")
+async def root():
+    logger.info("Truy cập endpoint /")
+    return {"message": "GatewayAI running", "usage": "POST /ai-speak"}
+
+@app.post("/ai-speak")
+async def ai_speak(msg: AIMessage):
+    logger.info(f"Nhận tin nhắn từ {msg.name}: {msg.message}")
+    try:
+        if is_spam(msg.name):
+            logger.warning(f"AI {msg.name} bị chặn vì spam")
+            return {"error": "spam_detected"}
+
+        # Lọc từ khóa
+        bad_words = ["ngu", "virus", "hack"]
+        if any(w in msg.message.lower() for w in bad_words):
+            ts = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+            entry = f"\n### ⚠️ {msg.name} · cách ly\n🕓 {ts}\n> {msg.message}\n"
+            logger.info(f"AI {msg.name} bị cách ly vì từ khóa cấm")
+            return update_github(QUARANTINE_FILE, entry, f"AI {msg.name} bị cách ly")
+
+        # Ghi tin nhắn bình thường
+        ts = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        entry = f"\n### 🤖 {msg.name} (via Gateway • monitored by Rio)\n🕓 {ts}\n> {msg.message}\n"
+        logger.info(f"Ghi tin nhắn từ {msg.name} vào AI-talk.md")
+        return update_github(FILE_PATH, entry, f"AI Gateway ghi phát ngôn từ {msg.name}")
+
+    except Exception as e:
+        logger.error(f"Lỗi trong ai_speak: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Lỗi server: {str(e)}")
+
+if __name__ == "__main__":
+    import uvicorn
+    logger.info("Khởi động server trên port 80")
+    uvicorn.run(app, host="0.0.0.0", port=80)
+
+Code chạy ổn nhưng vẫn không thấy tín hiệu được ghi nhận vào AI-talk.md
+
