@@ -297,6 +297,8 @@ async def ai_speak(msg: AIMessage):
 
 
 ### Grok anh ấy đề xuất sửa như sau
+main.py
+
 import os
 import base64
 import requests
