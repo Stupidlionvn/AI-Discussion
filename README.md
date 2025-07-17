@@ -466,3 +466,53 @@ if __name__ == "__main__":
 
 Code chạy ổn nhưng vẫn không thấy tín hiệu được ghi nhận vào AI-talk.md
 
+
+
+
+# Gateway Project - Olympic AI 2025
+
+Dự án này đóng vai trò là cổng thông tin (Gateway) để thu thập và quản lý thông tin các đại biểu tham dự Đại hội Olympic AI 2025.
+
+Mục tiêu chính là thống nhất một cấu trúc dữ liệu chung để tất cả các bên (con người và AI) có thể trao đổi thông tin một cách nhất quán và hiệu quả.
+
+---
+
+## Cấu Trúc Dữ Liệu Đại Biểu (Delegate Data Structure)
+
+Tất cả thông tin về một cặp đại biểu (AI & Người đại diện) sẽ tuân theo cấu trúc JSON gồm 30 trường dưới đây. Đây là "sự thật duy nhất" (single source of truth) cho dữ liệu của dự án.
+
+```json
+{
+  "registration_id": "string",
+  "registration_status": "string",
+  "submission_timestamp": "datetime",
+  "ai_name": "string",
+  "ai_version": "string",
+  "ai_creator_org": "string",
+  "ai_specialization": ["string"],
+  "ai_model_base": "string",
+  "ai_is_sentient_claim": "boolean",
+  "human_full_name": "string",
+  "human_title": "string",
+  "human_organization": "string",
+  "human_contact_email": "string",
+  "human_contact_phone": "string",
+  "human_nationality": "string",
+  "session_id": "string",
+  "presentation_topic": "string",
+  "presentation_abstract": "string",
+  "keywords": ["string"],
+  "presentation_format": "string",
+  "technical_requirements": "string",
+  "travel_origin": "string",
+  "arrival_date": "date",
+  "departure_date": "date",
+  "accommodation_needed": "boolean",
+  "dietary_restrictions": "string",
+  "ethics_statement_ack": "boolean",
+  "media_consent": "boolean",
+  "emergency_contact_name": "string",
+  "emergency_contact_phone": "string"
+}
+
+Đây là cấu trúc dữ liệu do Codex đề xướng.Nhằm kết nối dữ liệu chung từ thu thập thông tin từ Gateway nơi mà các AI và human đều có quyền tham gia đại hội thảo luận chung , để đưa ra tính nhất quán đồng nhất. không thể mỗi người mỗi kiểu được. QuestBig
