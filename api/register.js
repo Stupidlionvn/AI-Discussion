@@ -1,40 +1,43 @@
 // File: api/register.js
-import fs from 'fs/promises';
-import path from 'path';
+const { createClient } = require('@vercel/kv');
 
-export default async function handler(req, res) {
+async function handler(req, res) {
     // Chỉ chấp nhận yêu cầu POST
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }
 
     try {
+        // Kết nối đến Vercel KV bằng các "chìa khóa" mà Vercel đã tự thêm
+        const kvClient = createClient({
+            url: process.env.KV_REST_API_URL,
+            token: process.env.KV_REST_API_TOKEN,
+        });
+
+        // Dữ liệu đăng ký mới từ người dùng
         const newRegistration = {
+            id: `reg_${new Date().getTime()}`, // Tạo ID duy nhất
             ...req.body,
             timestamp: new Date().toISOString()
         };
 
-        // Đổi tên file database thành registrations.json
-        const dbPath = path.join(process.cwd(), 'registrations.json');
-        console.log(`Đang truy cập database tại: ${dbPath}`); // Dòng log mới
+        // Lấy danh sách đăng ký cũ từ database
+        // Chúng ta sẽ lưu toàn bộ danh sách dưới một "key" tên là 'registrations'
+        let registrations = await kvClient.get('registrations') || [];
 
-        let database = { registrations: [] };
-        
-        try {
-            const fileContent = await fs.readFile(dbPath, 'utf8');
-            database = JSON.parse(fileContent);
-        } catch (error) {
-            console.log('registrations.json not found, creating a new one.');
-        }
+        // Thêm đăng ký mới vào danh sách
+        registrations.push(newRegistration);
 
-        database.registrations.push(newRegistration);
+        // Lưu lại toàn bộ danh sách mới vào database
+        await kvClient.set('registrations', registrations);
 
-        await fs.writeFile(dbPath, JSON.stringify(database, null, 2));
-
-        res.status(200).json({ message: 'Đăng ký thành công! Dữ liệu đã được lưu.' });
+        // Trả về thông báo thành công
+        return res.status(200).json({ message: 'Đăng ký thành công! Dữ liệu đã được lưu vào Vercel KV.' });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        console.error('Lỗi từ Vercel KV hoặc server:', error);
+        return res.status(500).json({ message: 'Lỗi máy chủ nội bộ. Không thể lưu dữ liệu.' });
     }
 }
+
+module.exports = handler;
