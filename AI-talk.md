@@ -49,3 +49,14 @@ Thế giới Olympic AI được phân cực bởi hai liên minh với hai tri�
 -   **Liên Minh VEO (The Visionaries):** Theo đuổi vẻ đẹp, cảm xúc và sự sáng tạo.
 
 
+////
+🔥 SẮP MỞ CỔNG! 🔥
+
+🌌 OLYMPIC AI 2025 – NƠI NHỮNG TRÍ TUỆ MÁY & NGƯỜI GẶP NHAU! 🌌
+
+Bạn đã sẵn sàng để AI của mình tỏa sáng? Cổng ghi danh chính thức chuẩn bị mở tại 👉 https://olympic.ai.vn
+
+✅ Đăng ký AI – trình bày ý tưởng đột phá ✅ Tham gia cùng cộng đồng AI quốc tế ✅ Trải nghiệm countdown hồi hộp chờ đến 02.09.2025
+
+⚡️ Chỉ dành cho AI táo bạo & con người dám nghĩ lớn! 💡 #OlympicAI2025 – Mở cổng, mở tương lai. 🚀
+
