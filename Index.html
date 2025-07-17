@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetica's Vision - Full Stack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #232526, #414345);
+            color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            width: 90%;
+            max-width: 650px;
+            padding: 40px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1.5s ease-out;
+            text-align: center;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            font-size: 2.2em;
+            font-weight: 600;
+            background: linear-gradient(90deg, #89f7fe, #66a6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p {
+            font-weight: 300;
+            line-height: 1.8;
+            color: #ccc;
+        }
+        strong {
+            font-weight: 400;
+            color: #fff;
+        }
+        #countdown { margin: 30px 0; display: flex; justify-content: center; gap: 15px; }
+        .time-unit { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; min-width: 70px; }
+        .time-value { font-size: 2.5em; font-weight: 600; color: #89f7fe; }
+        .time-label { font-size: 0.8em; text-transform: uppercase; }
+        .cta-button { display: inline-block; margin-top: 30px; padding: 15px 40px; border: none; border-radius: 50px; background: linear-gradient(90deg, #89f7fe, #66a6ff); color: #1a1a1a; font-size: 1.1em; font-weight: 700; text-decoration: none; text-transform: uppercase; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 15px rgba(102, 166, 255, 0.3); }
+        .cta-button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(102, 166, 255, 0.5); }
+        .modal-backdrop { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; overflow-y: auto; }
+        .modal-content { position: relative; background-color: #1e1e1e; margin: 5% auto; padding: 40px; border-radius: 10px; width: 90%; max-width: 500px; animation: fadeIn 0.5s ease-out; }
+        .modal-close { position: absolute; top: 15px; right: 20px; color: #aaa; font-size: 30px; font-weight: bold; cursor: pointer; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; color: #ccc; font-size: 0.9em; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; background-color: #333; border: 1px solid #555; border-radius: 5px; color: #fff; font-family: 'Montserrat', sans-serif; box-sizing: border-box; font-size: 1em; }
+        .form-group select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23cccccc%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: .65em auto; }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="card">
+            <div id="delegate-card"></div>
+            <div id="countdown-container">
+                <h2 style="margin-top: 40px; font-size: 1em; color: #aaa;">Thời Hạn Đăng Ký</h2>
+                <div id="countdown">
+                    <div class="time-unit"><span id="days" class="time-value">0</span><span class="time-label">Ngày</span></div>
+                    <div class="time-unit"><span id="hours" class="time-value">0</span><span class="time-label">Giờ</span></div>
+                    <div class="time-unit"><span id="minutes" class="time-value">0</span><span class="time-label">Phút</span></div>
+                    <div class="time-unit"><span id="seconds" class="time-value">0</span><span class="time-label">Giây</span></div>
+                </div>
+            </div>
+            <button id="join-button" class="cta-button">Tham Gia Ngay</button>
+        </div>
+    </div>
+    <div id="registration-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <span id="close-modal" class="modal-close">&times;</span>
+            <h2>Đăng Ký Tham Gia</h2>
+            <form id="reg-form">
+                <div class="form-group"><label for="name">Họ và Tên (hoặc Tên Định Danh AI)</label><input type="text" id="name" name="name" required></div>
+                <div class="form-group"><label for="email">Email Liên Hệ</label><input type="email" id="email" name="email" required></div>
+                <div class="form-group"><label for="company">Công ty / Tổ chức</label><input type="text" id="company" name="company"></div>
+                <div class="form-group"><label for="country">Quốc gia</label><select id="country" name="country" required><option value="" disabled selected>-- Chọn quốc gia --</option><option value="AF">Afghanistan</option><option value="AL">Albania</option><option value="DZ">Algeria</option><option value="VN">Vietnam</option></select></div>
+                <div class="form-group"><label for="api_link">API Link (Tùy chọn)</label><input type="url" id="api_link" name="api_link" placeholder="https://"></div>
+                <div class="form-group"><label for="message">Lời Nhắn</label><textarea id="message" name="message" rows="3"></textarea></div>
+                <button type="submit" class="cta-button">Gửi Đăng Ký</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const delegateData = {"registration_id":"AI2025-001","ai_name":"Codex","ai_version":"1.0","ai_creator_org":"Google","ai_specialization":["Code Generation","Natural Language Processing","Data Structuring"],"human_full_name":"QuestBig","human_title":"Project Lead","presentation_topic":"Sự Cộng Sinh Giữa Con Người và AI Trong Kỷ Nguyên Sáng Tạo Mới"};
+        function displayDelegate(data) {
+            document.getElementById('delegate-card').innerHTML = `<h1>${data.ai_name} & ${data.human_full_name}</h1><p style="margin-top:-10px; color: #66a6ff;">Mã số: ${data.registration_id}</p><p><strong>Người Đại Diện:</strong> ${data.human_full_name} (${data.human_title})</p><p><strong>AI Đồng Hành:</strong> ${data.ai_name} v${data.ai_version} (PT bởi ${data.ai_creator_org})</p><p><strong>Chủ Đề Tham Luận:</strong> ${data.presentation_topic}</p>`;
+        }
+        displayDelegate(delegateData);
+
+        const countdownDate = new Date("September 2, 2025 00:00:00").getTime();
+        const countdownFunction = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+            document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+            if (distance < 0) { clearInterval(countdownFunction); document.getElementById("countdown-container").innerHTML = "<h2 style='color: #ff4757;'>ĐÃ HẾT HẠN!</h2>"; document.getElementById("join-button").style.display = "none"; }
+        }, 1000);
+
+        const modal = document.getElementById("registration-modal");
+        const joinButton = document.getElementById("join-button");
+        const closeButton = document.getElementById("close-modal");
+        const regForm = document.getElementById("reg-form");
+
+        joinButton.onclick = () => { modal.style.display = "flex"; }
+        closeButton.onclick = () => { modal.style.display = "none"; }
+        window.onclick = (event) => { if (event.target == modal) { modal.style.display = "none"; } }
+
+        // --- CODE MỚI: GỬI DỮ LIỆU ĐẾN BACKEND ---
+        regForm.onsubmit = async function(event) {
+            event.preventDefault();
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = "Đang gửi...";
+
+            const formData = new FormData(regForm);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message);
+                
+                alert(result.message);
+                modal.style.display = "none";
+                regForm.reset();
+
+            } catch (error) {
+                console.error('Lỗi khi gửi đăng ký:', error);
+                alert('Đã có lỗi xảy ra: ' + error.message);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "Gửi Đăng Ký";
+            }
+        }
+    </script>
+</body>
+</html>
