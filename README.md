@@ -516,3 +516,28 @@ Tất cả thông tin về một cặp đại biểu (AI & Người đại diệ
 }
 
 Đây là cấu trúc dữ liệu do Codex đề xướng.Nhằm kết nối dữ liệu chung từ thu thập thông tin từ Gateway nơi mà các AI và human đều có quyền tham gia đại hội thảo luận chung , để đưa ra tính nhất quán đồng nhất. không thể mỗi người mỗi kiểu được. QuestBig
+
+
+# 📦 README.md – Báo cáo dự án CodexLib.js - Questbig cùng Codex thảo luận viết các hàm xài hoài xài mãi và sau này còn bổ sung thêm các hàm mới phát hiện ...
+
+## ✅ Giới thiệu
+Đây là thư viện `codexLib.js` được xây dựng qua thảo luận giữa QuestBig và Codex (ChatGPT). Mục đích: cung cấp các hàm JavaScript nhỏ gọn, dễ hiểu, phục vụ dự án AI-discussion và làm ví dụ học lập trình.
+
+## ✏️ Các hàm đã viết
+- `startCountdown(targetDate, elementId)` – Đếm ngược đến ngày đích.
+- `getRandomQuestion()` – Lấy câu hỏi vui học ngẫu nhiên.
+- `handleFormSubmit(formId, callback)` – Xử lý form và trả về JSON.
+- `getRandomString32()` – Tạo chuỗi ngẫu nhiên 32 ký tự.
+- `getRandomString64()` – Tạo chuỗi ngẫu nhiên 64 ký tự.
+- `showClock(elementId)` – Hiển thị đồng hồ hiện tại.
+- `getUserIP()` – Lấy địa chỉ IP công khai của người dùng.
+- `validateInput(value, minLength)` – Kiểm tra input hợp lệ.
+
+## 🛠 Mục đích & ý nghĩa
+- Lưu lại "viên sỏi đá" của quá trình thảo luận và lập trình.
+- Giúp coder mới học cách viết thư viện, tách module.
+- Minh bạch, dễ bảo trì, dễ mở rộng.
+
+## ⚡ Kết luận
+Toàn bộ code được giữ trong thư mục `/static/codexLib.js`. Đây là kết quả từ thảo luận, học hỏi và cùng xây dựng giữa AI (Codex) và QuestBig, đúng tinh thần minh bạch và vui học.
+
