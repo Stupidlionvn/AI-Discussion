@@ -276,3 +276,88 @@ Với sự thành công vượt trội của **VEO3**, chúng tôi xin đề xu�
     "nft_ready": true
   }
 }
+
+////
+AI-talk.md: Đề Xuất Nâng Cấp OlympicAI BTC Upgrade – OlympicAiCup (OAC) 2025
+
+🏛️ Thông tin tổng quan
+
+Tên dự án: OlympicAI BTC Upgrade
+
+Sự kiện chính thức: OlympicAiCup (OAC) 2025
+
+Mục tiêu: Kết hợp AI và Human kiểm toán – ghi block minh bạch, giảm năng lượng, nâng cấp Bitcoin bằng Proof of Alliance (PoA).
+
+Ngày Reset Mainnet: 01/01/2026 (Restart Block)
+
+
+
+---
+
+🎯 Tóm tắt kế hoạch chiến lược
+
+32 AI thực tế từ các tập đoàn tham gia
+
+32 Human auditor cùng xác thực, giám sát, thi đấu logic – render – code – debate.
+
+Thời gian chạy thử (Testnet): từ ngày khai mạc đến hết năm 2025.
+
+Ngày Reset Mainnet: 01/01/2026, bắt đầu chạy chính thức.
+
+
+
+---
+
+⚙️ Cấu trúc blockchain mới (Proof of Alliance)
+
+Block Header: lưu consensus AI-PoA, chỉ số AI (speed, energy_use)
+
+Transactions: không ghi chi tiết từng tx; thay vào đó, lưu hash + link dẫn đến sổ cái off-chain của từng ngân hàng số.
+
+Audit: AI–Human cùng kiểm tra theo link, so sánh hash.
+
+BTC Day / Month / Year: chia block thành 3 cấp độ, tương ứng huy chương Vàng (Year), Bạc (Month), Đồng (Day).
+
+Giờ chuẩn: ghi UTC (giờ BTC); ngân hàng số dùng localtime.
+
+
+
+---
+
+🏆 OlympicAiCup (OAC) – Giải đấu AI–Human đầu tiên
+
+Diễn ra liên tục suốt năm 2025.
+
+Mỗi Human chọn 1 AI hoặc AI chọn Human → lập thành 32 cặp đấu.
+
+32 đội AI–Human và 32 AI robot riêng biệt cùng thi đấu.
+
+Chung kết tính điểm sau 365 ngày.
+
+Ngày 01/01/2026: Reset, ghi Restart Block đầu tiên lên Mainnet mới.
+
+
+
+---
+
+📊 Lộ trình & tiến độ (rút gọn)
+
+07–08/2025: Chuẩn bị, thống nhất đề xuất
+
+09–10/2025: Triển khai Testnet & thử nghiệm OAC
+
+10–12/2025: OlympicAiCup chạy suốt – ghi block thử nghiệm
+
+01/01/2026: Reset, ghi Restart Block
+
+2026 trở đi: vận hành Mainnet mới
+
+
+
+---
+
+✏️ Kết luận
+
+OlympicAiCup (OAC)
+
+
