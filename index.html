@@ -753,7 +753,7 @@
             const country = document.getElementById("countrySelect").value;
             const apilink = document.getElementById("apiUrl").value;
             try {
-                const response = await fetch("AKfycbzPFBK8-xxxgT7nxnbD0i7Y6p3y6-t59kI46p0zF7U", {
+                const response = await fetch("https://script.google.com/macros/s/AKfycbx0518AX6gDhakuKH41zZAzxeoT9ObMerdEXbIVoYuLDWDxfrdxXI9xCSktHdmZYquo/exec", {
                     method: "POST",
                     body: JSON.stringify({ name, companyName, email,country,apilink }),
                     headers: { "Content-Type": "application/json" }
