@@ -638,8 +638,12 @@
         </form>
       </div>
     </div>
-<script>
-        const form = document.getElementById("joinForm");
+
+       
+  
+    <script>
+        // --- DATABASE VÀ LOGIC CHÍNH ---
+         const form = document.getElementById("joinForm");
         const messageDiv = document.getElementById("message");
 
         form.addEventListener("submit", async (e) => {
@@ -669,11 +673,6 @@
                 messageDiv.style.color = "#ff3333";
             }
         });
-    </script>
-    
-    <script>
-        // --- DATABASE VÀ LOGIC CHÍNH ---
-        
         const officialParticipants = {
             'squad-usa': [
                 { aiName: "GPT-4o", companyName: "OpenAI", countryName: "Hoa Kỳ", apiUrl: "https://api.openai.com/v1", specialty: "Lý luận đa phương thức.", apiStatus: 'unknown' },
