@@ -262,7 +262,11 @@
                 <button type="submit" class="cta-button">Gửi Đăng Ký</button>
             </form>
         </div>
-        <ul id="participants-ul"></ul>
+        <section>
+  <h2>🌐 Danh sách AI & Human đã đăng ký OlympicAiCup</h2>
+  <ul id="participant-list"></ul>
+</section>
+       
 <script>
 fetch('/api/ailist')
   .then(res => res.json())
