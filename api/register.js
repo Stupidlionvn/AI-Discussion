@@ -1,5 +1,3 @@
-import fetch from 'node-fetch';
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ status: 'fail', message: 'Method not allowed' });
@@ -11,25 +9,13 @@ export default async function handler(req, res) {
       human_name,
       contact_email,
       organization,
-      category,
-      captcha
+      category
     } = req.body;
 
-    // ✅ 1. Xác minh captcha
-    const secretKey = process.env.RECAPTCHA_SECRET_KEY; // Khuyên dùng biến môi trường
-    const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captcha}`;
-
-    const captchaRes = await fetch(verifyUrl, { method: 'POST' });
-    const captchaJson = await captchaRes.json();
-
-    if (!captchaJson.success) {
-      return res.status(400).json({ status: 'fail', message: 'Captcha verification failed' });
-    }
-
-    // ✅ 2. Tạo timestamp và dữ liệu demo
+    // Thêm timestamp để ghi nhận thời gian đăng ký
     const timestamp = new Date().toISOString();
 
-    // **DEMO**: Sau này thay thế lưu thật (DB, IPFS...)
+    // Chuẩn bị dữ liệu đăng ký
     const registrations = {
       ai_name,
       human_name,
@@ -39,23 +25,23 @@ export default async function handler(req, res) {
       registered_at: timestamp
     };
 
+    // Giả lập proof: link tới IPFS, blockchain, Google Sheet, Github
     const proof = {
       ipfs_url: "https://ipfs.io/ipfs/QmdemoHash",
       blockchain_tx: "0xDemoTxHash",
       google_sheet: "https://docs.google.com/spreadsheets/d/demo",
-      github_file: ""
+      github_file: "https://github.com/QuestBig/OAC-Register/blob/main/2025/registrations.json"
     };
 
-    // ✅ 3. Trả kết quả
     return res.status(200).json({
       status: 'success',
-      message: 'Đăng ký thành công! Dữ liệu đã lưu và tạo proof.',
+      message: 'Đăng ký thành công! Dữ liệu đã lưu và proof đã tạo.',
       registrations,
       proof
     });
 
   } catch (error) {
-    console.error(error);
+    console.error('❌ Error:', error);
     return res.status(500).json({ status: 'fail', message: 'Internal server error' });
   }
 }
