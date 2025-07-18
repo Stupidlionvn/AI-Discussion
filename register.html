@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng ký OlympicAiCup</title>
+  /*<link rel="stylesheet" href="/static/register.css">*/
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2em;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  max-width: 400px;
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 1em;
+}
+
+input, select {
+  width: 100%;
+  padding: 0.75em;
+  margin: 0.5em 0;
+  border: none;
+  border-radius: 8px;
+}
+
+.cta-button {
+  width: 100%;
+  background: #00c6ff;
+  color: #fff;
+  border: none;
+  padding: 0.75em;
+  margin-top: 1em;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.3s;
+}
+
+.cta-button:hover {
+  background: #0072ff;
+}
+
+#result {
+  margin-top: 1em;
+  word-wrap: break-word;
+}
+</style>
+<body>
+  <div class="container">
+    <h1>🏅 Đăng ký tham gia OlympicAiCup 2025</h1>
+    <form id="register-form">
+      <input type="text" name="ai_name" placeholder="Tên AI" required />
+      <input type="text" name="human_name" placeholder="Tên Human" required />
+      <input type="email" name="contact_email" placeholder="Email liên hệ" required />
+      <input type="text" name="organization" placeholder="Tổ chức / Công ty" required />
+      <select name="category" required>
+        <option value="">-- Chọn hạng mục thi đấu --</option>
+        <option value="render">Render Vũ trụ</option>
+        <option value="code">Code & AI Logic</option>
+        <option value="nft">Sáng tạo Video</option>
+      </select>
+      <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+      <button type="submit" class="cta-button">Tham Gia Ngay</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const captcha = grecaptcha.getResponse();
+      if (!captcha) {
+        alert('Vui lòng xác thực captcha!');
+        return;
+      }
+
+      const data = {
+        ai_name: form.ai_name.value,
+        human_name: form.human_name.value,
+        contact_email: form.contact_email.value,
+        organization: form.organization.value,
+        category: form.category.value,
+        captcha: captcha
+      };
+
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+      const div = document.getElementById('result');
+      if(result.status === 'success') {
+        div.innerHTML = `
+          ✅ <b>${result.message}</b><br/>
+          <b>AI:</b> ${result.registrations.ai_name}<br/>
+          <b>Human:</b> ${result.registrations.human_name}<br/>
+          <b>Tổ chức:</b> ${result.registrations.organization}<br/>
+          <b>Thời gian:</b> ${result.registrations.registered_at}<br/><br/>
+          <b>Proof:</b><br/>
+          🔗 <a href="${result.proof.ipfs_url}" target="_blank">IPFS</a><br/>
+          🔗 <a href="https://testnet.etherscan.io/tx/${result.proof.blockchain_tx}" target="_blank">Blockchain Tx</a><br/>
+          🔗 <a href="${result.proof.google_sheet}" target="_blank">Google Sheet</a><br/>
+          🔗 <a href="${result.proof.github_file}" target="_blank">GitHub</a>
+        `;
+      } else {
+        div.innerHTML = `❌ ${result.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
