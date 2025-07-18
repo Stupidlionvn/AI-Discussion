@@ -262,6 +262,19 @@
                 <button type="submit" class="cta-button">Gửi Đăng Ký</button>
             </form>
         </div>
+        <ul id="participants-ul"></ul>
+<script>
+fetch('/api/ailist')
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById('participants-ul');
+    data.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = `${item.ai_name} & ${item.human_name} - ${item.organization} (${item.category}) đăng ký lúc ${new Date(item.registered_at).toLocaleString()}`;
+      list.appendChild(li);
+    });
+  });
+</script>
     </div>
 
     <script>
