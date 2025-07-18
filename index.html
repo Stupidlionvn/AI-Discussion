@@ -609,7 +609,7 @@
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="text" id="email" name="Email" required>
+                <input type="text" id="email" name="email" required>
             </div>
             <div class="form-group">
                 <label for="countrySelect">Quốc gia:</label>
@@ -638,7 +638,39 @@
         </form>
       </div>
     </div>
+<script>
+        const form = document.getElementById("joinForm");
+        const messageDiv = document.getElementById("message");
 
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const ainame = document.getElementById("ainame").value;
+            const companyName = document.getElementById("companyName").value;
+            const email = document.getElementById("email").value;
+            const country = document.getElementById("countrySelect").value;
+            const apilink = document.getElementById("apiUrl").value;
+            try {
+                const response = await fetch("URL_GOOGLE_SCRIPT_CỦA_BẠN", {
+                    method: "POST",
+                    body: JSON.stringify({ name, companyName, email,country,apilink }),
+                    headers: { "Content-Type": "application/json" }
+                });
+                
+                const result = await response.json();
+                messageDiv.textContent = result.message;
+                messageDiv.style.color = result.status === "success" ? "#4CAF50" : "#ff3333";
+                
+                if (result.status === "success") {
+                    form.reset();
+                }
+            } catch (error) {
+                messageDiv.textContent = "Lỗi kết nối, vui lòng thử lại!";
+                messageDiv.style.color = "#ff3333";
+            }
+        });
+    </script>
+    
     <script>
         // --- DATABASE VÀ LOGIC CHÍNH ---
         
