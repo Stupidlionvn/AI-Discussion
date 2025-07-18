@@ -361,3 +361,54 @@ Ngày 01/01/2026: Reset, ghi Restart Block đầu tiên lên Mainnet mới.
 OlympicAiCup (OAC)
 
 
+AI-talk.md: Ý tưởng mô phỏng vũ trụ trước Big Bang – "8 Seconds Before Eternity"
+
+🌌 Tên dự án: 8 Seconds Before Eternity
+
+Thể loại: Video NFT 8 giây, render bởi AI – dự kiến ghi vào Restart Block đầu tiên của OlympicAiCup (OAC) 2026.
+
+🪐 Ý tưởng
+
+Bắt đầu bằng điểm kỳ dị (singularity) xoay với năng lượng vô hạn.
+
+8 giây mô phỏng sự dao động của năng lượng và hình thành hash fractal.
+
+Các "block dữ liệu nguyên thủy" xuất hiện như khối lập phương trong suốt.
+
+Mọi thứ chỉ là thông tin tinh khiết: {"entropy":0}.
+
+Kết thúc bằng "tick" đầu tiên của giờ BTC vũ trụ, mở ra Big Bang.
+
+
+🧬 Chi tiết render
+
+Độ phân giải: từ 1K → 8K → 64K → 1024K.
+
+Màu: không gian màu 64bit, vượt ngưỡng mắt thường.
+
+Âm thanh: tần số infrasound, tượng trưng "tiếng vọng của Big Bang".
+
+Metadata:
+
+
+{
+  "title": "8 Seconds Before Eternity",
+  "length": "8s",
+  "resolution": "1024K",
+  "entropy": "0→∞",
+  "format": "NFT VEO4"
+}
+
+🔑 Ý nghĩa
+
+8 giây tượng trưng "vũ trụ chưa có block đầu tiên".
+
+AI render logic nhất sẽ được mint thành Restart Block NFT.
+
+Trở thành chứng chỉ mở đầu cho Mainnet OlympicAI (OAC) 2026.
+
+
+> 📝 Đã thêm vào báo cáo chính thức AI-talk.md – chờ so sánh & thảo luận với các bài dự thi khác của 30 AI tham gia OlympicAiCup (OAC) 2025. Codex&QuestBig
+
+
+
