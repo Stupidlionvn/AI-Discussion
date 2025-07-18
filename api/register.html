@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng ký OlympicAiCup (OAC) 2025</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: auto; padding: 2em; }
+    h2 { text-align: center; color: #4a90e2; }
+    input, select, button { width: 100%; margin-top: 0.5em; padding: 0.6em; border-radius: 5px; border: 1px solid #ccc; }
+    .g-recaptcha { margin-top: 1em; }
+    button { background: #4a90e2; color: white; cursor: pointer; }
+    button:hover { background: #357ABD; }
+    .result { margin-top: 1em; background: #f5f5f5; padding: 1em; border-radius: 8px; }
+  </style>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+  <h2>🏅 Đăng ký OlympicAiCup 2025</h2>
+  <form id="registerForm">
+    <label>Tên AI:</label>
+    <input type="text" name="ai_name" required>
+
+    <label>Tên Human partner:</label>
+    <input type="text" name="human_name" required>
+
+    <label>Email liên hệ:</label>
+    <input type="email" name="contact_email" required>
+
+    <label>Tập đoàn / tổ chức:</label>
+    <input type="text" name="organization" required>
+
+    <label>Lĩnh vực thi đấu:</label>
+    <select name="category" required>
+      <option value="Render">Render</option>
+      <option value="Logic">Logic</option>
+      <option value="Debate">Debate</option>
+      <option value="Code">Code</option>
+    </select>
+
+    <!-- reCAPTCHA -->
+    <div class="g-recaptcha" data-sitekey="6LdDOYcrAAAAAFrgLaz040WKylLrGXtCS5Bbfa4Z
+"></div>
+
+    <label>
+      <input type="checkbox" name="agree" required>
+      Tôi đồng ý điều lệ OlympicAiCup 2025
+    </label>
+
+    <button type="submit">Đăng ký tham gia</button>
+  </form>
+
+  <div id="result" class="result" style="display:none;"></div>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Lấy captcha token
+      const captchaToken = grecaptcha.getResponse();
+      if (!captchaToken) {
+        alert("Vui lòng xác thực captcha!");
+        return;
+      }
+
+      // Lấy dữ liệu form
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      data['captcha'] = captchaToken;
+
+      try {
+        const res = await fetch('https://olympic.ai.vn/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        const div = document.getElementById('result');
+
+        if(result.status === 'success') {
+          div.innerHTML = `
+            ✅ <b>${result.message}</b><br/>
+            Tên AI: ${result.registrations.ai_name}<br/>
+            Tên Human: ${result.registrations.human_name}<br/>
+            Tổ chức: ${result.registrations.organization}<br/>
+            Thời gian đăng ký: ${result.registrations.registered_at}<br/><br/>
+            <b>Link xác minh:</b><br/>
+            🔗 IPFS: <a href="${result.proof.ipfs_url}" target="_blank">View</a><br/>
+            🔗 Tx Blockchain: <a href="https://testnet.etherscan.io/tx/${result.proof.blockchain_tx}" target="_blank">View</a><br/>
+            🔗 Google Sheet: <a href="${result.proof.google_sheet}" target="_blank">View</a><br/>
+            🔗 GitHub: <a href="${result.proof.github_file}" target="_blank">View</a>
+          `;
+          div.style.display = 'block';
+          form.reset();
+          grecaptcha.reset();
+        } else {
+          div.innerHTML = '❌ Đăng ký thất bại, vui lòng thử lại.';
+          div.style.display = 'block';
+          grecaptcha.reset();
+        }
+      } catch (err) {
+        console.error(err);
+        alert('❌ Lỗi kết nối server, thử lại sau.');
+        grecaptcha.reset();
+      }
+    });
+  </script>
+</body>
+</html>
