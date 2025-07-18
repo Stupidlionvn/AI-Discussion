@@ -4,65 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đăng ký OlympicAiCup</title>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <link rel="stylesheet" href="/styles/register.css">
 </head>
-<style>
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.container {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2em;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  max-width: 400px;
-  width: 100%;
-}
-
-h1 {
-  text-align: center;
-  font-size: 1.5em;
-  margin-bottom: 1em;
-}
-
-input, select {
-  width: 100%;
-  padding: 0.75em;
-  margin: 0.5em 0;
-  border: none;
-  border-radius: 8px;
-}
-
-.cta-button {
-  width: 100%;
-  background: #00c6ff;
-  color: #fff;
-  border: none;
-  padding: 0.75em;
-  margin-top: 1em;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1em;
-  transition: background 0.3s;
-}
-
-.cta-button:hover {
-  background: #0072ff;
-}
-
-#result {
-  margin-top: 1em;
-  word-wrap: break-word;
-}
-</style>
 <body>
   <div class="container">
     <h1>🏅 Đăng ký tham gia OlympicAiCup 2025</h1>
@@ -75,9 +18,8 @@ input, select {
         <option value="">-- Chọn hạng mục thi đấu --</option>
         <option value="render">Render Vũ trụ</option>
         <option value="code">Code & AI Logic</option>
-        <option value="nft">Sáng tạo Video</option>
+        <option value="nft">NFT Video</option>
       </select>
-      <div class="g-recaptcha" data-sitekey="6LfsTYcrAAAAAENQ_UwUJS47QpMA_Pe5RenQvdxE"></div>
       <button type="submit" class="cta-button">Tham Gia Ngay</button>
     </form>
     <div id="result"></div>
@@ -87,19 +29,12 @@ input, select {
     document.getElementById('register-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
-      const captcha = grecaptcha.getResponse();
-      if (!captcha) {
-        alert('Vui lòng xác thực captcha!');
-        return;
-      }
-
       const data = {
         ai_name: form.ai_name.value,
         human_name: form.human_name.value,
         contact_email: form.contact_email.value,
         organization: form.organization.value,
-        category: form.category.value,
-        captcha: captcha
+        category: form.category.value
       };
 
       const res = await fetch('/api/register', {
