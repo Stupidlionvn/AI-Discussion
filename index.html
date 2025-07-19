@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Final Battle - Working Version</title>
+    <style>
+        body { margin: 0; background-color: #000510; overflow: hidden; }
+        canvas { display: block; cursor: crosshair; }
+        #hud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            pointer-events: none;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+        }
+        #countdown { font-size: 4vw; font-weight: bold; position: absolute; top: 5%; width: 100%; text-align: center; }
+        #score { font-size: 5vw; font-weight: bold; position: absolute; top: 2%; left: 2%; }
+        #hi-score { font-size: 5vw; font-weight: bold; position: absolute; top: 2%; left: 2%; }
+        #instructions {
+            font-size: 2.5vw;
+            font-weight: bold;
+            opacity: 0.7;
+            position: absolute;
+            bottom: 5%;
+            width: 100%;
+            text-align: center;
+        }
+        #leaderboard {
+            position: absolute;
+            top: 2%;
+            right: 2%;
+            width: 25%;
+            max-width: 300px;
+            font-size: 1.5vw;
+            background-color: rgba(0, 20, 30, 0.5);
+            border: 1px solid #00ffff;
+            padding: 10px;
+        }
+        #leaderboard h3 { margin: 0 0 10px 0; text-align: center; font-size: 1.8vw; }
+        #leaderboard ol { list-style: none; padding: 0; margin: 0; }
+        #leaderboard li { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .player-human { font-weight: bold; color: #ffdd00; }
+    </style>
+</head>
+<body>
+    <div id="hud">
+        <div id="countdown">--:--:--:--</div>
+        <div id="score">SCORE: 0</div>
+         <div id="high-score">HIGH: 0</div>
+        <div id="leaderboard">
+            <h3>BẢNG XẾP HẠNG</h3>
+            <ol id="player-list"></ol>
+        </div>
+        <div id="instructions">DỌN DẸP VŨ TRỤ TRƯỚC GIỜ MỞ CỔNG</div>
+    </div>
+
+    <script type="importmap">
+        { "imports": { "three": "https://unpkg.com/three@0.165.0/build/three.module.js" } }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+
+        // --- CÀI ĐẶT ---
+        const BUBBLE_COUNT = 15;
+        const BUBBLE_BASE_SPEED = 0.08;
+        const launchDate = new Date('2025-09-02T07:00:00');
+
+        // --- BIẾN TOÀN CỤC ---
+        let camera, scene, renderer, listener, popSound, bubbles, bubbleGeometry, clock;
+        let score = 0, gameActive = true, lastAIScoreUpdateTime = 0;
+        const activeEffects = [], raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
+        const leaderboardData = [
+            { name: 'Questbig_Human', score: 0, isHuman: true },
+            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
+            { name: 'AI_Vertex', score: 0 }, { name: 'AI_Bot', score: 0 },
+        ];
+        const scoreElement = document.getElementById('score');
+        const countdownElement = document.getElementById('countdown');
+  
+        const playerListElement = document.getElementById('player-list');
+
+        // --- HÀM XỬ LÝ ---
+
+        function updateLeaderboard() {
+            leaderboardData.sort((a, b) => b.score - a.score);
+            playerListElement.innerHTML = '';
+            leaderboardData.forEach(player => {
+                const li = document.createElement('li');
+                if (player.isHuman) li.classList.add('player-human');
+                li.innerHTML = `<span>${player.name}</span><span>${player.score}</span>`;
+                playerListElement.appendChild(li);
+            });
+        }
+
+        // ✨ HOÀN THIỆN HÀM HIỆU ỨNG NỔ ✨
+        function createExplosion(position, color, scale) {
+            const particleCount = Math.floor(20 * scale);
+            const particleGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const velocities = [];
+            for (let i = 0; i < particleCount; i++) {
+                const vec = new THREE.Vector3().randomDirection().multiplyScalar(Math.random() * 0.2 * scale);
+                velocities.push(vec);
+                positions.set([position.x, position.y, position.z], i * 3);
+            }
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particleMaterial = new THREE.PointsMaterial({ color: color, size: 0.1 * scale, transparent: true });
+            const particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+            activeEffects.push({ particles, velocities, life: 1.0 });
+        }
+
+        function spawnBubble() {
+            if (!gameActive) return;
+            const bubbleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true });
+            bubbleMaterial.color.setHSL(Math.random(), 1.0, 0.7);
+            const bubble = new THREE.Mesh(bubbleGeometry, bubbleMaterial);
+            const randomScale = 0.4 + Math.random() * 1.2;
+            bubble.scale.set(randomScale, randomScale, randomScale);
+            const side = Math.random() > 0.5 ? 1 : -1;
+            const spawnX = side * (window.innerWidth / 100 + 10);
+            bubble.position.set(spawnX, (Math.random() - 0.5) * 15, (Math.random() - 0.5) * 20 - 10);
+            const speed = (BUBBLE_BASE_SPEED / randomScale);
+            bubble.userData.velocity = new THREE.Vector3(-bubble.position.x, 0, 0).normalize().multiplyScalar(speed);
+            bubble.userData.weavePhase = Math.random() * Math.PI * 2;
+            bubble.userData.weaveSpeed = 0.8 + Math.random() * 0.5;
+            bubble.userData.points = Math.ceil(20 / randomScale);
+            bubbles.add(bubble);
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const distance = launchDate - now;
+            if (distance < 0) {
+                countdownElement.innerHTML = "CỔNG ĐÃ MỞ!<br/><small>F5 để chơi lại</small>";
+                gameActive = false;
+                return;
+            }
+            const d = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            const h = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            const m = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const s = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+            countdownElement.innerText = `${d}:${h}:${m}:${s}`;
+        }
+
+        function handleClick(event) {
+            if (!gameActive) return;
+            if (popSound.context.state === 'suspended') popSound.context.resume();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(bubbles.children);
+            if (intersects.length > 0) {
+                const targetBubble = intersects[0].object;
+                const pointsGained = targetBubble.userData.points || 10;
+                score += pointsGained;
+                leaderboardData.find(p => p.isHuman).score = score;
+                
+                scoreElement.innerText = `SCORE: ${score}`;
+                
+                
+               
+                updateLeaderboard();
+                
+                
+                createExplosion(targetBubble.position, targetBubble.material.color, targetBubble.scale.x);
+                if (popSound.buffer && !popSound.isPlaying) popSound.play();
+                bubbles.remove(targetBubble);
+                setTimeout(spawnBubble, 200);
+                
+              
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+            
+            if (gameActive && elapsedTime > lastAIScoreUpdateTime + 2) {
+                leaderboardData.forEach(player => {
+                    if (!player.isHuman) player.score += Math.floor(Math.random() * 15 + 5);
+                });
+                updateLeaderboard();
+                lastAIScoreUpdateTime = elapsedTime;
+            }
+            
+            // ✨ HOÀN THIỆN VÒNG LẶP HIỆU ỨNG NỔ ✨
+            for (let i = activeEffects.length - 1; i >= 0; i--) {
+                const effect = activeEffects[i];
+                effect.life -= 0.02;
+                if (effect.life <= 0) {
+                    scene.remove(effect.particles);
+                    activeEffects.splice(i, 1);
+                    continue;
+                }
+                const positions = effect.particles.geometry.attributes.position.array;
+                for (let j = 0; j < effect.velocities.length; j++) {
+                    positions[j*3] += effect.velocities[j].x;
+                    positions[j*3+1] += effect.velocities[j].y;
+                    positions[j*3+2] += effect.velocities[j].z;
+                }
+                effect.particles.geometry.attributes.position.needsUpdate = true;
+                effect.particles.material.opacity = effect.life;
+            }
+
+            if (gameActive) {
+                bubbles.children.forEach(bubble => {
+                    bubble.position.add(bubble.userData.velocity);
+                    const weaveAmplitude = bubble.scale.x;
+                    bubble.position.y += Math.sin(elapsedTime * bubble.userData.weaveSpeed + bubble.userData.weavePhase) * 0.05 * weaveAmplitude;
+                    if (Math.abs(bubble.position.x) > 30) {
+                        bubbles.remove(bubble);
+                        spawnBubble();
+                    }
+                    
+                });
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // --- KHỞI ĐỘNG ---
+        function init() {
+            // ✨ KHỞI TẠO ĐẦY ĐỦ CÁC ĐỐI TƯỢNG THREE.JS ✨
+            scene = new THREE.Scene();
+            scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 20;
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            
+            listener = new THREE.AudioListener();
+            camera.add(listener);
+            popSound = new THREE.Audio(listener);
+            const audioLoader = new THREE.AudioLoader();
+            audioLoader.load('https://cdn.jsdelivr.net/gh/red-acorn/Web-Audio-School/sounds/sfx/pop.mp3', (buffer) => {
+                popSound.setBuffer(buffer);
+                popSound.setVolume(0.5);
+            });
+            
+            bubbles = new THREE.Group();
+            scene.add(bubbles);
+            bubbleGeometry = new THREE.SphereGeometry(1, 16, 16);
+            clock = new THREE.Clock();
+
+            window.addEventListener('click', handleClick);
+            window.addEventListener('resize', onWindowResize);
+            
+            for(let i=0; i<BUBBLE_COUNT; i++) spawnBubble();
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+            updateLeaderboard();
+            
+            
+            animate();
+        }
+        
+        init();
+
+    </script>
+</body>
+</html>
+
