@@ -75,11 +75,28 @@
         let score = 0, gameActive = true, lastAIScoreUpdateTime = 0;
         const activeEffects = [], raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
         const leaderboardData = [
-          { name: 'HM_QuestBig', score: 0, isHuman: true },
+          { name: 'HM_Guest', score: 0, isHuman: true },
+            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
+            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
+            { name: 'AI_Deepseek', score: 0 },
+            
+            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
+            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
+            { name: 'AI_Deepseek', score: 0 },
+            
             { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
             { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
             { name: 'AI_Deepseek', score: 0 },
         
+            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
+            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
+            { name: 'AI_Deepseek', score: 0 },
+            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
+            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
+            { name: 'AI_Deepseek', score: 0 },
+            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
+            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
+            { name: 'AI_Deepseek', score: 0 }
         ];
         const scoreElement = document.getElementById('score');
         const countdownElement = document.getElementById('countdown');
