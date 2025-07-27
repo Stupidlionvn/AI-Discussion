@@ -75,28 +75,28 @@
         let score = 0, gameActive = true, lastAIScoreUpdateTime = 0;
         const activeEffects = [], raycaster = new THREE.Raycaster(), mouse = new THREE.Vector2();
         const leaderboardData = [
-          { name: 'HM_Guest', score: 0, isHuman: true },
+              { name: 'HM_Guest', score: 0, isHuman: true },
             { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
             { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
             { name: 'AI_Deepseek', score: 0 },
             
-            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
-            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
-            { name: 'AI_Deepseek', score: 0 },
+            { name: 'AI_Claude', score: 0 }, { name: 'AI_Llama', score: 0 },
+            { name: 'AI_Copilot', score: 0 }, { name: 'AI_Mistral', score: 0 },
+            { name: 'AI_ERNIE', score: 0 },
             
-            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
-            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
-            { name: 'AI_Deepseek', score: 0 },
+            { name: 'AI_OpenAssistant', score: 0 }, { name: 'AI_Alpaca', score: 0 },
+            { name: 'AI_CharacterAI', score: 0 }, { name: 'AI_VinAI', score: 0 },
+            { name: 'AI_ZaloAI', score: 0 },
         
-            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
-            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
-            { name: 'AI_Deepseek', score: 0 },
-            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
-            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
-            { name: 'AI_Deepseek', score: 0 },
-            { name: 'AI_Codex', score: 0 }, { name: 'AI_Gemini', score: 0 },
-            { name: 'AI_ChatGpt', score: 0 }, { name: 'AI_Grok', score: 0 },
-            { name: 'AI_Deepseek', score: 0 }
+            { name: 'AI_FPTAI', score: 0 }, { name: 'AI_Pi', score: 0 },
+            { name: 'AI_Perplexity', score: 0 }, { name: 'AI_Reka', score: 0 },
+            { name: 'AI_Youchat', score: 0 },
+            { name: 'AI_Sapling', score: 0 }, { name: 'AI_CopyAI', score: 0 },
+            { name: 'AI_SenseChat ', score: 0 }, { name: 'AI_Grok', score: 0 },
+            { name: 'AI_Zhipu', score: 0 },
+            { name: 'AI_Kimi', score: 0 }, { name: 'AI_Tongyi', score: 0 },
+            { name: 'AI_Tabnine', score: 0 }, { name: 'AI_CursorAI', score: 0 },
+            { name: 'AI_Amazon', score: 0 },{ name: 'AI_B.AI', score: 0 }
         ];
         const scoreElement = document.getElementById('score');
         const countdownElement = document.getElementById('countdown');
